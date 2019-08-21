@@ -1,2 +1,2 @@
-"object"==typeof exports&&"undefined"!=typeof module||"function"==typeof define&&define.amd&&define(function(){});
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t(e.bigmacIndexPriceCalculator={})}(this,function(e){var t=function(e){this.ipstack_key=e};t.prototype.ipstack=function(e){try{return Promise.resolve(fetch("https://api.ipstack.com/"+e+"?access_key="+this.ipstack_key)).then(function(e){return e.json()})}catch(e){return Promise.reject(e)}},t.prototype.price=function(e){try{return Promise.resolve(this.ipstack("134.201.250.155")).then(function(e){return console.log(e),0})}catch(e){return Promise.reject(e)}},e.ParityPrice=t});
 //# sourceMappingURL=index.umd.js.map

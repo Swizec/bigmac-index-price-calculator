@@ -1,2 +1,2 @@
-
+var t=function(t){this.ipstack_key=t};t.prototype.ipstack=function(t){try{return Promise.resolve(fetch("https://api.ipstack.com/"+t+"?access_key="+this.ipstack_key)).then(function(t){return t.json()})}catch(t){return Promise.reject(t)}},t.prototype.price=function(t){try{return Promise.resolve(this.ipstack("134.201.250.155")).then(function(t){return console.log(t),0})}catch(t){return Promise.reject(t)}},exports.ParityPrice=t;
 //# sourceMappingURL=index.js.map
