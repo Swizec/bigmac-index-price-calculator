@@ -1,7 +1,7 @@
 // January 2019 Big Mac Index
 import BigMacIndex from "./BigMacIndex.json";
 
-export class ParityPrice {
+export default class ParityPrice {
     ipstack_key: string;
 
     constructor(ipstack_key: string) {
