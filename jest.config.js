@@ -1,3 +1,5 @@
+const jest = require('jest')
+
 module.exports = {
     "roots": [
         "./src"

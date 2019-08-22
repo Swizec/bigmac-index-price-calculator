@@ -1,5 +1,6 @@
 // January 2019 Big Mac Index
-import BigMacIndex from "./BigMacIndex.json";
+const BigMacIndex = require("./BigMacIndex.json");
+const fetch = require("isomorphic-fetch");
 
 export default class ParityPrice {
     ipstack_key: string;
@@ -8,21 +9,21 @@ export default class ParityPrice {
         this.ipstack_key = ipstack_key;
     }
 
-    private async ipstack(ip: string) {
+    private async ipstack() {
         const res = await fetch(
-            `https://api.ipstack.com/${ip}?access_key=${this.ipstack_key}`
+            `http://api.ipstack.com/check?access_key=${this.ipstack_key}`
         );
         return res.json();
     }
 
     async price(USAprice: number): Promise<number> {
-        console.log(await this.ipstack("134.201.250.155"));
-        return 0;
+        const location = await this.ipstack();
+        const pricePerBurger = USAprice / BigMacIndex["United States"];
+
+        if (location.country_name in BigMacIndex) {
+            return pricePerBurger * BigMacIndex[location.country_name];
+        }
+
+        return USAprice;
     }
 }
-
-// export function parityPrice(USAprice: number): number {
-//     const pricePerBurger = USAprice / BigMacIndex["United States"];
-
-//     return pricePerBurger * BigMacIndex[country];
-// }
