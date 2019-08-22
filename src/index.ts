@@ -24,6 +24,8 @@ export default class ParityPrice {
             return Math.floor(
                 pricePerBurger * BigMacIndex[location.country_name]
             );
+        } else if (location.continent_code === "EU") {
+            return Math.round(pricePerBurger * BigMacIndex["Euro area"]);
         }
 
         return USAprice;

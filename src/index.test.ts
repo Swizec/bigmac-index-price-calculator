@@ -1,6 +1,9 @@
 import ParityPrice from "./index";
 import * as fetchMock from "isomorphic-fetch";
 
+const URL =
+    "http://api.ipstack.com/check?access_key=cb952dd732eb8e511d44d441788fcf67";
+
 describe("ParityPrice", () => {
     beforeEach(() => {
         fetchMock.reset();
@@ -12,45 +15,42 @@ describe("ParityPrice", () => {
     });
 
     test("returns same price for USA", async () => {
-        fetchMock.mock(
-            "http://api.ipstack.com/check?access_key=cb952dd732eb8e511d44d441788fcf67",
-            {
-                body: {
-                    ip: "67.188.8.242",
-                    type: "ipv4",
-                    continent_code: "NA",
-                    continent_name: "North America",
-                    country_code: "US",
-                    country_name: "United States",
-                    region_code: "CA",
-                    region_name: "California",
-                    city: "San Francisco",
-                    zip: "94110",
-                    latitude: 37.7506,
-                    longitude: -122.4121,
-                    location: {
-                        geoname_id: null,
-                        capital: "Washington D.C.",
-                        languages: [[Object]],
-                        country_flag: "http://assets.ipstack.com/flags/us.svg",
-                        country_flag_emoji: "🇺🇸",
-                        country_flag_emoji_unicode: "U+1F1FA U+1F1F8",
-                        calling_code: "1",
-                        is_eu: false
-                    }
-                },
-                status: 200
-            }
-        );
+        fetchMock.mock(URL, {
+            body: {
+                ip: "67.188.8.242",
+                type: "ipv4",
+                continent_code: "NA",
+                continent_name: "North America",
+                country_code: "US",
+                country_name: "United States",
+                region_code: "CA",
+                region_name: "California",
+                city: "San Francisco",
+                zip: "94110",
+                latitude: 37.7506,
+                longitude: -122.4121,
+                location: {
+                    geoname_id: null,
+                    capital: "Washington D.C.",
+                    languages: [[Object]],
+                    country_flag: "http://assets.ipstack.com/flags/us.svg",
+                    country_flag_emoji: "🇺🇸",
+                    country_flag_emoji_unicode: "U+1F1FA U+1F1F8",
+                    calling_code: "1",
+                    is_eu: false
+                }
+            },
+            status: 200
+        });
 
         const parity = new ParityPrice("cb952dd732eb8e511d44d441788fcf67");
         await expect(parity.price(149)).resolves.toBe(149);
     });
 
     test("returns Japan price for Japan", async () => {
-        fetchMock.mock(
-            "http://api.ipstack.com/check?access_key=cb952dd732eb8e511d44d441788fcf67",
-            {
+        fetchMock.mock(URL, {
+            status: 200,
+            body: {
                 ip: "1.33.213.230",
                 type: "ipv4",
                 continent_code: "AS",
@@ -80,9 +80,48 @@ describe("ParityPrice", () => {
                     is_eu: false
                 }
             }
-        );
+        });
 
         const parity = new ParityPrice("cb952dd732eb8e511d44d441788fcf67");
         await expect(parity.price(149)).resolves.toBe(96);
+    });
+
+    test("uses euro zone for europe", async () => {
+        fetchMock.mock(URL, {
+            status: 200,
+            body: {
+                ip: "193.77.212.100",
+                type: "ipv4",
+                continent_code: "EU",
+                continent_name: "Europe",
+                country_code: "SI",
+                country_name: "Slovenia",
+                region_code: "061",
+                region_name: "Ljubljana",
+                city: "Ljubljana",
+                zip: "1000",
+                latitude: 46.051429748535156,
+                longitude: 14.505970001220703,
+                location: {
+                    geoname_id: 3196359,
+                    capital: "Ljubljana",
+                    languages: [
+                        {
+                            code: "sl",
+                            name: "Slovenian",
+                            native: "Sloven\u0161\u010dina"
+                        }
+                    ],
+                    country_flag: "http://assets.ipstack.com/flags/si.svg",
+                    country_flag_emoji: "\ud83c\uddf8\ud83c\uddee",
+                    country_flag_emoji_unicode: "U+1F1F8 U+1F1EE",
+                    calling_code: "386",
+                    is_eu: true
+                }
+            }
+        });
+
+        const parity = new ParityPrice("cb952dd732eb8e511d44d441788fcf67");
+        await expect(parity.price(149)).resolves.toBe(124);
     });
 });
