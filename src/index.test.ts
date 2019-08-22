@@ -238,4 +238,59 @@ describe("ParityPrice", () => {
         const parity = new ParityPrice("cb952dd732eb8e511d44d441788fcf67");
         await expect(parity.price(149)).resolves.toBe(121);
     });
+
+    test("returns full ipstack response if asked", async () => {
+        fetchMock.mock(URL, {
+            status: 200,
+            body: { hai: "hello", continent_code: "SA" }
+        });
+
+        const parity = new ParityPrice("cb952dd732eb8e511d44d441788fcf67");
+        const { fairPrice, location } = await parity.priceWithLocation(149);
+
+        expect(fairPrice).toBe(121);
+        expect(location).toEqual({ hai: "hello", continent_code: "SA" });
+    });
+
+    test("supports custom IP", async () => {
+        fetchMock.mock(
+            "http://api.ipstack.com/64.116.135.48?access_key=cb952dd732eb8e511d44d441788fcf67",
+            {
+                status: 200,
+                body: {
+                    ip: "64.116.135.48",
+                    type: "ipv4",
+                    continent_code: "SA",
+                    continent_name: "South America",
+                    country_code: "VE",
+                    country_name: "Venezuela",
+                    region_code: "A",
+                    region_name: "Distrito Federal",
+                    city: "Caracas",
+                    zip: "1010",
+                    latitude: 10.498499870300293,
+                    longitude: -66.9009017944336,
+                    location: {
+                        geoname_id: 3646738,
+                        capital: "Caracas",
+                        languages: [
+                            {
+                                code: "es",
+                                name: "Spanish",
+                                native: "Espa\u00f1ol"
+                            }
+                        ],
+                        country_flag: "http://assets.ipstack.com/flags/ve.svg",
+                        country_flag_emoji: "\ud83c\uddfb\ud83c\uddea",
+                        country_flag_emoji_unicode: "U+1F1FB U+1F1EA",
+                        calling_code: "58",
+                        is_eu: false
+                    }
+                }
+            }
+        );
+
+        const parity = new ParityPrice("cb952dd732eb8e511d44d441788fcf67");
+        await expect(parity.price(149, "64.116.135.48")).resolves.toBe(121);
+    });
 });

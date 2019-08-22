@@ -35,12 +35,21 @@ You might want to tell your users that prices have been adjusted for purchasing 
 import ParityPrice from "./index";
 
 const parity = new ParityPrice(`<your api key>`);
-const { fairPrice, locationData } = await parity.price(149)
+const { fairPrice, location } = await parity.priceWithLocation(149)
 ```
 
 This includes currency information, if you have a paid ipstack API key.
 
-### Custom IP
+### Using on the backend
+
+You can optionally provide an IP argument to use a custom IP. Useful on a server where you see the user's IP in your request handler and don't want to fetch pricing info in the name of your server.
+
+```javascript
+import ParityPrice from "./index";
+
+const parity = new ParityPrice(`<your api key>`);
+const { fairPrice, location } = await parity.price(149, '68.188.8.242')
+```
 
 # License
 

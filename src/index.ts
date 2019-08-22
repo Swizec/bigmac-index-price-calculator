@@ -9,31 +9,52 @@ export default class ParityPrice {
         this.ipstack_key = ipstack_key;
     }
 
-    private async ipstack() {
+    private async ipstack(IP?: string) {
         const res = await fetch(
-            `http://api.ipstack.com/check?access_key=${this.ipstack_key}`
+            `http://api.ipstack.com/${IP ? IP : "check"}?access_key=${
+                this.ipstack_key
+            }`
         );
         return res.json();
     }
 
-    async price(USAprice: number): Promise<number> {
-        const location = await this.ipstack();
+    private _price(USAprice: number, location: any): number {
         const pricePerBurger = USAprice / BigMacIndex["United States"];
 
+        let fairPrice = USAprice;
+
         if (location.country_name in BigMacIndex) {
-            return Math.round(
+            fairPrice = Math.round(
                 pricePerBurger * BigMacIndex[location.country_name]
             );
         } else if (location.continent_code === "EU") {
-            return Math.round(pricePerBurger * BigMacIndex["Euro area"]);
+            fairPrice = Math.round(pricePerBurger * BigMacIndex["Euro area"]);
         } else if (location.continent_code === "AS") {
-            return Math.round(pricePerBurger * BigMacIndex["Vietnam"]);
+            fairPrice = Math.round(pricePerBurger * BigMacIndex["Vietnam"]);
         } else if (location.continent_code === "AF") {
-            return Math.round(pricePerBurger * BigMacIndex["Egypt"]);
+            fairPrice = Math.round(pricePerBurger * BigMacIndex["Egypt"]);
         } else if (location.continent_code === "SA") {
-            return Math.round(pricePerBurger * BigMacIndex["Brazil"]);
+            fairPrice = Math.round(pricePerBurger * BigMacIndex["Brazil"]);
         }
 
-        return USAprice;
+        return fairPrice;
+    }
+
+    async price(USAprice: number, IP?: string): Promise<number> {
+        const location = await this.ipstack(IP);
+        const fairPrice = this._price(USAprice, location);
+
+        return fairPrice;
+    }
+
+    async priceWithLocation(
+        USAprice: number,
+        IP?: string
+    ): Promise<{ fairPrice: number; location: any }> {
+        const location = await this.ipstack(IP);
+
+        const fairPrice = this._price(USAprice, location);
+
+        return { fairPrice, location: location };
     }
 }
