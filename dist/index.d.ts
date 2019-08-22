@@ -56,7 +56,7 @@ export declare const BigMacIndex: {
     Ukraine: number;
     Russia: number;
 };
-export default class ParityPrice {
+export declare class ParityPrice {
     ipstack_key: string;
     cache: {
         [key: string]: any;
