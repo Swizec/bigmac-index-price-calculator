@@ -61,7 +61,8 @@ export declare class ParityPrice {
     cache: {
         [key: string]: any;
     };
-    constructor(ipstack_key: string);
+    enableSSL: boolean;
+    constructor(ipstack_key: string, enable_ssl?: boolean);
     private ipstack;
     private _price;
     price(USAprice: number, IP?: string): Promise<number>;

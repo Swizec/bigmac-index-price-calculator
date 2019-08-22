@@ -64,10 +64,12 @@ export const BigMacIndex = {
 export class ParityPrice {
     ipstack_key: string;
     cache: { [key: string]: any };
+    enableSSL: boolean;
 
-    constructor(ipstack_key: string) {
+    constructor(ipstack_key: string, enable_ssl: boolean = false) {
         this.ipstack_key = ipstack_key;
         this.cache = {};
+        this.enableSSL = enable_ssl;
     }
 
     private async ipstack(IP?: string) {
@@ -75,7 +77,9 @@ export class ParityPrice {
 
         if (!this.cache[param]) {
             const res = await fetch(
-                `http://api.ipstack.com/${param}?access_key=${this.ipstack_key}`
+                `http${
+                    this.enableSSL ? "s" : ""
+                }://api.ipstack.com/${param}?access_key=${this.ipstack_key}`
             );
             this.cache[param] = await res.json();
         }

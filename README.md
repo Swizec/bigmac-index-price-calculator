@@ -51,6 +51,16 @@ const parity = new ParityPrice(`<your api key>`);
 const { fairPrice, location } = await parity.price(149, '68.188.8.242')
 ```
 
+### SSL requests
+
+If your ipstack API key supports it, you can enable SSL.
+
+```javascript
+import { ParityPrice}  from "./index";
+
+const parity = new ParityPrice(`<your api key>`, true);
+```
+
 # License
 
 MIT
