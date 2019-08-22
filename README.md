@@ -19,7 +19,7 @@ yarn add bigmac-index-price-calculator
 Install `bigmac-index-price-calculator`
 
 ```javascript
-import ParityPrice from "./index";
+import { ParityPrice } from "./index";
 
 const parity = new ParityPrice(`<your api key>`);
 const fairPrice = await parity.price(149)
@@ -32,7 +32,7 @@ const fairPrice = await parity.price(149)
 You might want to tell your users that prices have been adjusted for purchasing power parity. Set the meta flag to include the full response from ipstack.
 
 ```javascript
-import ParityPrice from "./index";
+import { ParityPrice } from "./index";
 
 const parity = new ParityPrice(`<your api key>`);
 const { fairPrice, location } = await parity.priceWithLocation(149)
@@ -45,7 +45,7 @@ This includes currency information, if you have a paid ipstack API key.
 You can optionally provide an IP argument to use a custom IP. Useful on a server where you see the user's IP in your request handler and don't want to fetch pricing info in the name of your server.
 
 ```javascript
-import ParityPrice from "./index";
+import { ParityPrice}  from "./index";
 
 const parity = new ParityPrice(`<your api key>`);
 const { fairPrice, location } = await parity.price(149, '68.188.8.242')

@@ -1,4 +1,4 @@
-import ParityPrice from "./index";
+import { ParityPrice } from "./index";
 import * as fetchMock from "isomorphic-fetch";
 
 const URL =

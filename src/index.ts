@@ -61,7 +61,7 @@ export const BigMacIndex = {
     Russia: 1.65
 };
 
-export default class ParityPrice {
+export class ParityPrice {
     ipstack_key: string;
     cache: { [key: string]: any };
 
