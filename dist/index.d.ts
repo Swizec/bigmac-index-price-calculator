@@ -1,6 +1,14 @@
-export declare class ParityPrice {
+export default class ParityPrice {
     ipstack_key: string;
+    cache: {
+        [key: string]: any;
+    };
     constructor(ipstack_key: string);
     private ipstack;
-    price(USAprice: number): Promise<number>;
+    private _price;
+    price(USAprice: number, IP?: string): Promise<number>;
+    priceWithLocation(USAprice: number, IP?: string): Promise<{
+        fairPrice: number;
+        location: any;
+    }>;
 }

@@ -4,18 +4,24 @@ const fetch = require("isomorphic-fetch");
 
 export default class ParityPrice {
     ipstack_key: string;
+    cache: { [key: string]: any };
 
     constructor(ipstack_key: string) {
         this.ipstack_key = ipstack_key;
+        this.cache = {};
     }
 
     private async ipstack(IP?: string) {
-        const res = await fetch(
-            `http://api.ipstack.com/${IP ? IP : "check"}?access_key=${
-                this.ipstack_key
-            }`
-        );
-        return res.json();
+        const param = IP ? IP : "check";
+
+        if (!this.cache[param]) {
+            const res = await fetch(
+                `http://api.ipstack.com/${param}?access_key=${this.ipstack_key}`
+            );
+            this.cache[param] = await res.json();
+        }
+
+        return this.cache[param];
     }
 
     private _price(USAprice: number, location: any): number {
