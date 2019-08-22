@@ -21,7 +21,9 @@ export default class ParityPrice {
         const pricePerBurger = USAprice / BigMacIndex["United States"];
 
         if (location.country_name in BigMacIndex) {
-            return pricePerBurger * BigMacIndex[location.country_name];
+            return Math.floor(
+                pricePerBurger * BigMacIndex[location.country_name]
+            );
         }
 
         return USAprice;
