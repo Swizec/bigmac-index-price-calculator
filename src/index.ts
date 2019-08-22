@@ -21,11 +21,17 @@ export default class ParityPrice {
         const pricePerBurger = USAprice / BigMacIndex["United States"];
 
         if (location.country_name in BigMacIndex) {
-            return Math.floor(
+            return Math.round(
                 pricePerBurger * BigMacIndex[location.country_name]
             );
         } else if (location.continent_code === "EU") {
             return Math.round(pricePerBurger * BigMacIndex["Euro area"]);
+        } else if (location.continent_code === "AS") {
+            return Math.round(pricePerBurger * BigMacIndex["Vietnam"]);
+        } else if (location.continent_code === "AF") {
+            return Math.round(pricePerBurger * BigMacIndex["Egypt"]);
+        } else if (location.continent_code === "SA") {
+            return Math.round(pricePerBurger * BigMacIndex["Brazil"]);
         }
 
         return USAprice;

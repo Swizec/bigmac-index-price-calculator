@@ -124,4 +124,118 @@ describe("ParityPrice", () => {
         const parity = new ParityPrice("cb952dd732eb8e511d44d441788fcf67");
         await expect(parity.price(149)).resolves.toBe(124);
     });
+
+    test("uses Vietnam as placeholder for Asian countries", async () => {
+        fetchMock.mock(URL, {
+            status: 200,
+            body: {
+                ip: "90.143.31.5",
+                type: "ipv4",
+                continent_code: "AS",
+                continent_name: "Asia",
+                country_code: "KZ",
+                country_name: "Kazakhstan",
+                region_code: "AST",
+                region_name: "Nur-Sultan",
+                city: "Nur-Sultan",
+                zip: null,
+                latitude: 51.16667175292969,
+                longitude: 71.44999694824219,
+                location: {
+                    geoname_id: 1526273,
+                    capital: "Astana",
+                    languages: [
+                        {
+                            code: "kk",
+                            name: "Kazakh",
+                            native: "\u049a\u0430\u0437\u0430\u049b\u0448\u0430"
+                        },
+                        {
+                            code: "ru",
+                            name: "Russian",
+                            native: "\u0420\u0443\u0441\u0441\u043a\u0438\u0439"
+                        }
+                    ],
+                    country_flag: "http://assets.ipstack.com/flags/kz.svg",
+                    country_flag_emoji: "\ud83c\uddf0\ud83c\uddff",
+                    country_flag_emoji_unicode: "U+1F1F0 U+1F1FF",
+                    calling_code: "76,77",
+                    is_eu: false
+                }
+            }
+        });
+
+        const parity = new ParityPrice("cb952dd732eb8e511d44d441788fcf67");
+        await expect(parity.price(149)).resolves.toBe(75);
+    });
+
+    test("uses Egypt as placeholder for African countries", async () => {
+        fetchMock.mock(URL, {
+            status: 200,
+            body: {
+                ip: "41.184.24.183",
+                type: "ipv4",
+                continent_code: "AF",
+                continent_name: "Africa",
+                country_code: "NG",
+                country_name: "Nigeria",
+                region_code: "LA",
+                region_name: "Lagos",
+                city: "Lagos",
+                zip: "100002",
+                latitude: 6.4351301193237305,
+                longitude: 3.416059970855713,
+                location: {
+                    geoname_id: 2332459,
+                    capital: "Abuja",
+                    languages: [
+                        { code: "en", name: "English", native: "English" }
+                    ],
+                    country_flag: "http://assets.ipstack.com/flags/ng.svg",
+                    country_flag_emoji: "\ud83c\uddf3\ud83c\uddec",
+                    country_flag_emoji_unicode: "U+1F1F3 U+1F1EC",
+                    calling_code: "234",
+                    is_eu: false
+                }
+            }
+        });
+
+        const parity = new ParityPrice("cb952dd732eb8e511d44d441788fcf67");
+        await expect(parity.price(149)).resolves.toBe(60);
+    });
+
+    test("uses Brazil as placeholder for South American countries", async () => {
+        fetchMock.mock(URL, {
+            status: 200,
+            body: {
+                ip: "64.116.135.48",
+                type: "ipv4",
+                continent_code: "SA",
+                continent_name: "South America",
+                country_code: "VE",
+                country_name: "Venezuela",
+                region_code: "A",
+                region_name: "Distrito Federal",
+                city: "Caracas",
+                zip: "1010",
+                latitude: 10.498499870300293,
+                longitude: -66.9009017944336,
+                location: {
+                    geoname_id: 3646738,
+                    capital: "Caracas",
+                    languages: [
+                        { code: "es", name: "Spanish", native: "Espa\u00f1ol" }
+                    ],
+                    country_flag: "http://assets.ipstack.com/flags/ve.svg",
+                    country_flag_emoji: "\ud83c\uddfb\ud83c\uddea",
+                    country_flag_emoji_unicode: "U+1F1FB U+1F1EA",
+                    calling_code: "58",
+                    is_eu: false
+                }
+            }
+        });
+
+        const parity = new ParityPrice("cb952dd732eb8e511d44d441788fcf67");
+        await expect(parity.price(149)).resolves.toBe(121);
+    });
 });
